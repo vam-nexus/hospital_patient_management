@@ -1,54 +1,34 @@
 # Hospital Patient Management System
 
-A comprehensive hospital patient management system that streamlines bed booking and patient care coordination.
+A simple web-based patient management system for doctors to track and manage their patients.
 
 ## Overview
 
-This system enables healthcare facilities to efficiently manage patient admissions, bed allocations, and overall patient care workflow. The primary focus is on providing a seamless bed booking experience for both medical staff and patients.
+This Flask-based system allows doctors to register, login, and manage their own patient records. Each doctor has access only to their own patients, ensuring data privacy and organization.
 
 ## Features
 
-### 🏥 Bed Management
-- **Real-time bed availability tracking**
-- **Bed booking and reservation system**
-- **Multiple bed types support** (ICU, General Ward, Private Room, etc.)
-- **Bed status monitoring** (Available, Occupied, Maintenance, Reserved)
+- **Doctor Authentication**: Secure login/signup system with password hashing
+- **Patient Management**: Add, view, update, and delete patient records
+- **Patient Status Tracking**: Monitor patient status (Active, Discharged, Critical)
+- **Doctor Isolation**: Each doctor sees only their own patients
+- **Real-time Statistics**: Dashboard showing patient counts and status distribution
+- **Responsive Design**: Modern, mobile-friendly interface
 
-### 👥 Patient Management
-- **Patient registration and profile management**
-- **Medical history tracking**
-- **Admission and discharge processing**
-- **Patient search and filtering**
+## Quick Start
 
-### 📋 Administrative Features
-- **Staff management and role-based access**
-- **Department and ward organization**
-- **Booking history and analytics**
-- **Reporting and dashboard views**
-
-## Getting Started
-
-### Prerequisites
-- Python 3.8 or higher
-- pip (Python package installer)
-
-### Installation
-
-1. Clone the repository:
+1. Install Flask:
 ```bash
-git clone <repository-url>
-cd hospital_patient_management
+pip install flask
 ```
 
-2. Install dependencies:
+2. Run the application:
 ```bash
-pip install -r requirements.txt
+python app.py
 ```
 
-3. Run the application:
-```bash
-python main.py
-```
+3. Open your browser to `http://127.0.0.1:5054`
+4. Sign up as a new doctor or login with existing credentials
 
 
 

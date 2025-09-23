@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Patient Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        input, select {
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .patient-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .patient-table th,
+        .patient-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .patient-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .patient-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-discharged {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .status-critical {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .no-patients {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1>🏥 Hospital Management System</h1>
+                    <p class="subtitle">Welcome, Dr. {{ doctor_name }}</p>
+                </div>
+                <div>
+                    <a href="{{ url_for('logout') }}" class="btn btn-logout" style="background: rgba(255,255,255,0.2); color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 5px;">Logout</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Statistics -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="total-patients">{{ patients|length }}</div>
+                <div class="stat-label">Total Patients</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="active-patients">
+                    {{ patients | selectattr("status", "equalto", "Active") | list | length }}
+                </div>
+                <div class="stat-label">Active Patients</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="discharged-patients">
+                    {{ patients | selectattr("status", "equalto", "Discharged") | list | length }}
+                </div>
+                <div class="stat-label">Discharged</div>
+            </div>
+        </div>
+
+        <!-- Add Patient Form -->
+        <div class="card">
+            <h2>Add New Patient to Your Practice</h2>
+            <form id="patient-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name">Patient Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" name="age" min="1" max="120" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="condition">Medical Condition</label>
+                        <input type="text" id="condition" name="condition" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Patient</button>
+            </form>
+        </div>
+
+        <!-- Patients List -->
+        <div class="card">
+            <h2>Your Patient Records</h2>
+            {% if patients %}
+            <table class="patient-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Phone</th>
+                        <th>Condition</th>
+                        <th>Admission Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="patients-tbody">
+                    {% for patient in patients %}
+                    <tr data-patient-id="{{ patient.id }}">
+                        <td>{{ patient.id }}</td>
+                        <td>{{ patient.name }}</td>
+                        <td>{{ patient.age }}</td>
+                        <td>{{ patient.gender }}</td>
+                        <td>{{ patient.phone }}</td>
+                        <td>{{ patient.condition }}</td>
+                        <td>{{ patient.admission_date }}</td>
+                        <td>
+                            <span class="status status-{{ patient.status.lower() }}">
+                                {{ patient.status }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <button class="btn btn-warning btn-status" data-patient-id="{{ patient.id }}" 
+                                        data-current-status="{{ patient.status }}">
+                                    Update Status
+                                </button>
+                                <button class="btn btn-danger btn-delete" data-patient-id="{{ patient.id }}">
+                                    Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="no-patients">
+                <p>No patients registered yet. Add your first patient using the form above.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Add Patient Form Handler
+        document.getElementById('patient-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const patientData = Object.fromEntries(formData.entries());
+            
+            try {
+                const response = await fetch('/add_patient', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(patientData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Refresh the page to show the new patient
+                    window.location.reload();
+                } else {
+                    alert('Error adding patient');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error adding patient');
+            }
+        });
+
+        // Delete Patient Handler
+        document.addEventListener('click', async function(e) {
+            if (e.target.classList.contains('btn-delete')) {
+                const patientId = e.target.dataset.patientId;
+                
+                if (confirm('Are you sure you want to delete this patient?')) {
+                    try {
+                        const response = await fetch(`/delete_patient/${patientId}`, {
+                            method: 'DELETE'
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (result.success) {
+                            // Remove the row from the table
+                            const row = e.target.closest('tr');
+                            row.remove();
+                            
+                            // Update statistics
+                            updateStatistics();
+                            
+                            // Check if no patients left
+                            const tbody = document.getElementById('patients-tbody');
+                            if (tbody.children.length === 0) {
+                                window.location.reload();
+                            }
+                        } else {
+                            alert('Error deleting patient');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Error deleting patient');
+                    }
+                }
+            }
+        });
+
+        // Update Status Handler
+        document.addEventListener('click', async function(e) {
+            if (e.target.classList.contains('btn-status')) {
+                const patientId = e.target.dataset.patientId;
+                const currentStatus = e.target.dataset.currentStatus;
+                
+                // Cycle through statuses
+                const statuses = ['Active', 'Discharged', 'Critical'];
+                const currentIndex = statuses.indexOf(currentStatus);
+                const newStatus = statuses[(currentIndex + 1) % statuses.length];
+                
+                try {
+                    const response = await fetch(`/update_status/${patientId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ status: newStatus })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        // Update the status in the table
+                        const row = e.target.closest('tr');
+                        const statusCell = row.querySelector('.status');
+                        statusCell.textContent = newStatus;
+                        statusCell.className = `status status-${newStatus.toLowerCase()}`;
+                        
+                        // Update the button's data attribute
+                        e.target.dataset.currentStatus = newStatus;
+                        
+                        // Update statistics
+                        updateStatistics();
+                    } else {
+                        alert('Error updating patient status');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error updating patient status');
+                }
+            }
+        });
+
+        // Update Statistics
+        function updateStatistics() {
+            const rows = document.querySelectorAll('#patients-tbody tr');
+            const totalPatients = rows.length;
+            
+            let activeCount = 0;
+            let dischargedCount = 0;
+            
+            rows.forEach(row => {
+                const status = row.querySelector('.status').textContent.trim();
+                if (status === 'Active') activeCount++;
+                if (status === 'Discharged') dischargedCount++;
+            });
+            
+            document.getElementById('total-patients').textContent = totalPatients;
+            document.getElementById('active-patients').textContent = activeCount;
+            document.getElementById('discharged-patients').textContent = dischargedCount;
+        }
+    </script>
+</body>
+</html>
