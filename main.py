@@ -41,7 +41,6 @@ def prompt_llm(prompt, with_linebreak=False):
 
 
 if __name__ == "__main__":
-    ### Task 1: YOUR CODE HERE - Write a prompt for the LLM to respond to the user
     prompt = "write a 3 line post about pizza"
 
     # Get Response

@@ -13,11 +13,13 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #45B7D1 100%);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: 2rem;
         }
 
         .auth-container {
@@ -69,7 +71,7 @@
         input[type="email"]:focus,
         input[type="password"]:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #FF6B6B;
         }
 
         .btn {
@@ -85,13 +87,13 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
             color: white;
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
         }
 
         .auth-footer {
@@ -100,7 +102,7 @@
         }
 
         .auth-footer a {
-            color: #667eea;
+            color: #FF6B6B;
             text-decoration: none;
             font-weight: 600;
         }
@@ -159,6 +161,18 @@
         </div>
     </div>
 
+    <!-- Simple Chatbot -->
+    <div class="auth-container">
+        <div class="auth-header">
+            <h2>🍄 Ask about our features</h2>
+        </div>
+        <div id="chat-messages" style="height: 200px; overflow-y: auto; margin-bottom: 1rem; padding: 1rem; background: #FFF9C4; border-radius: 8px; border: 2px solid #FFD54F;"></div>
+        <div style="display: flex; gap: 0.5rem;">
+            <input type="text" id="chat-input" placeholder="Ask about the app features..." style="flex: 1; border-color: #FF6B6B;">
+            <button onclick="sendMessage()" class="btn btn-primary" style="width: auto;">Send</button>
+        </div>
+    </div>
+
     <script>
         document.getElementById('login-form').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -186,6 +200,37 @@
                 console.error('Error:', error);
                 alert('Login failed. Please try again.');
             }
+        });
+
+        // Simple chatbot function
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const messages = document.getElementById('chat-messages');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            messages.innerHTML += `<div style="margin-bottom: 1rem; padding: 0.5rem; background: #FFCDD2; border-radius: 15px; border: 2px solid #FF6B6B;"><strong>🔴 You:</strong> ${message}</div>`;
+            input.value = '';
+            
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message })
+                });
+                const data = await response.json();
+                messages.innerHTML += `<div style="margin-bottom: 1rem; padding: 0.5rem; background: #C8E6C9; border-radius: 15px; border: 2px solid #4CAF50; line-height: 1.6;"><strong>🟢 Assistant:</strong><br>${data.response}</div>`;
+                messages.scrollTop = messages.scrollHeight;
+            } catch (error) {
+                messages.innerHTML += `<div style="margin-bottom: 0.5rem; color: red;"><strong>Error:</strong> Failed to get response</div>`;
+            }
+        }
+        
+        // Allow Enter key to send message
+        document.getElementById('chat-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
         });
     </script>
 </body>

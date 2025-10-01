@@ -12,6 +12,7 @@ from datetime import datetime
 import json
 import os
 import hashlib
+from test_llm import prompt_llm
 
 app = Flask(__name__)
 app.secret_key = "hospital_management_secret_key_2023"  # Change this in production
@@ -241,6 +242,37 @@ def update_status(patient_id):
 
     save_patients()
     return jsonify({"success": True})
+
+
+@app.route("/chat", methods=["POST"])
+def chat():
+    """Simple chatbot about app features"""
+    data = request.get_json()
+    user_message = data.get("message", "")
+
+    # Create context about the app features
+    context = """You are a helpful assistant for a Hospital Patient Management System. 
+    This app allows doctors to: register/login, add patients, view patient records, 
+    update patient status (Active/Discharged/Critical), delete patients, and see statistics.
+    Answer questions about these features briefly and helpfully.
+    
+    Instructions:
+    - limit your response to be 4 lines max
+    - there should be 3 bullet points max and each is 8 words max
+    
+    """
+
+    prompt = f"{context}\n\nUser question: {user_message}"
+    with open("results/prompt.txt", "w") as f:
+        f.write(prompt)
+    response = prompt_llm(prompt)
+
+    # Format the response for better display
+    formatted_response = response.replace("•", "<br>•").replace("- ", "<br>• ")
+    if formatted_response.startswith("<br>"):
+        formatted_response = formatted_response[4:]  # Remove leading <br>
+
+    return jsonify({"response": formatted_response})
 
 
 if __name__ == "__main__":
