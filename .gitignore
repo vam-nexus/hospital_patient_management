@@ -22,7 +22,7 @@ env/
 .env/
 .venv/
 ENV/
-
+quick_test.py
 # IDE specific files
 .idea/
 .vscode/

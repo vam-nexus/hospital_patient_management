@@ -1,0 +1,5 @@
+[
+{"input":{"name":"alex", "age":20, "gender":"male", "phone":"1234567890", "condition":"fever", "admission_date":"2025-09-22 18:40:40", "status":"Active"}, "output":"Patient added successfully"}
+{"expected_output":{"matched": "julia"}}
+
+]

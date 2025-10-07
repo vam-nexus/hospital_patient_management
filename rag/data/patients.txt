@@ -1,0 +1,57 @@
+PATIENT ID: P001
+Name: Sarah Johnson
+Date of Birth: March 15, 1985
+Doctor Notes: Patient presented with persistent cough and shortness of breath
+lasting 3 weeks. Physical examination revealed bilateral wheezing and decreased
+breath sounds in lower lobes. Chest X-ray shows signs of bronchitis with
+possible pneumonia in right lower lobe. Prescribed azithromycin 500mg daily
+for 5 days and albuterol inhaler for bronchospasm. Patient advised to return
+if symptoms worsen or persist beyond one week. Follow-up appointment scheduled
+in 10 days.
+
+PATIENT ID: P002
+Name: Michael Chen
+Date of Birth: July 22, 1972
+Doctor Notes: 51-year-old male with history of hypertension presents for
+routine follow-up. Blood pressure well controlled on current medication
+regimen (lisinopril 10mg daily). Patient reports good adherence to low-sodium
+diet and regular exercise routine. Recent lab work shows normal kidney
+function and electrolytes. Discussed importance of continued lifestyle
+modifications. Patient experiencing occasional headaches, likely
+tension-related due to work stress. Recommended stress management techniques
+and over-the-counter pain relief as needed.
+
+PATIENT ID: P003
+Name: Emily Rodriguez
+Date of Birth: November 8, 1990
+Doctor Notes: 33-year-old female presenting with acute abdominal pain in right
+lower quadrant, nausea, and low-grade fever for 12 hours. Physical examination
+positive for McBurney's point tenderness and positive Rovsing's sign. CBC
+shows elevated white blood cell count at 14,000. Clinical presentation highly
+suggestive of acute appendicitis. Surgical consultation obtained and patient
+scheduled for emergency appendectomy. Pre-operative labs and imaging completed.
+Patient and family counseled on procedure and post-operative care expectations.
+
+PATIENT ID: P004
+Name: Robert Thompson
+Date of Birth: January 30, 1958
+Doctor Notes: 65-year-old male with type 2 diabetes mellitus presents for
+quarterly diabetes management visit. HbA1c improved from 8.2% to 7.1% since
+last visit, indicating better glycemic control. Patient reports improved
+dietary compliance and regular blood glucose monitoring. Current medications
+include metformin 1000mg twice daily and glipizide 5mg daily. Foot examination
+normal with no signs of neuropathy or ulceration. Ophthalmology referral
+scheduled for annual diabetic eye exam. Encouraged to continue current
+management plan.
+
+PATIENT ID: P005
+Name: Amanda Foster
+Date of Birth: September 12, 1995
+Doctor Notes: 28-year-old female presents with symptoms of anxiety and
+depression following recent job loss. Patient reports difficulty sleeping,
+loss of appetite, and persistent worry about financial stability. PHQ-9 score
+of 16 indicates moderate to severe depression. No suicidal ideation expressed.
+Discussed treatment options including therapy and medication. Referred to
+mental health counselor for cognitive behavioral therapy. Started on sertraline
+50mg daily with follow-up in 2 weeks to assess response and side effects.
+Provided crisis resources and encouraged family support.

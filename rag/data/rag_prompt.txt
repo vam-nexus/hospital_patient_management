@@ -1,0 +1,24 @@
+Please answer the user's question based on the following information.
+
+<INFOMATION>
+PATIENT ID:P004
+Name: Robert Thompson
+Date of Birth: January 30, 1958
+Doctor Notes: 65-year-old male with type 2 diabetes mellitus presents for
+quarterly diabetes management visit. HbA1c improved from 8.2% to 7.1% since
+last visit, indicating better glycemic control. Patient reports improved
+dietary compliance and regular blood glucose monitoring. Current medications
+include metformin 1000mg twice daily and glipizide 5mg daily. Foot examination
+normal with no signs of neuropathy or ulceration. Ophthalmology referral
+scheduled for annual diabetic eye exam. Encouraged to continue current
+management plan.
+</INFOMATION>
+
+<USER QUESTION>
+who has diabetes?
+</USER QUESTION>
+
+Please provide a helpful and accurate response based on the information provided.
+
+* instructions:
+- limit your response to be 2 lines max (10 words each)

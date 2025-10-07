@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Patient RAG System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .pane {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        .data-pane {
+            flex: 1;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .query-pane {
+            flex: 1;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #555;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .data-content {
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .question-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        .question-input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        .ask-button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .ask-button:hover {
+            background-color: #0056b3;
+        }
+        .ask-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .response-area {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+            min-height: 100px;
+        }
+        .response-text {
+            white-space: pre-wrap;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+        .error {
+            color: #dc3545;
+            border-left-color: #dc3545;
+        }
+        .metadata {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hospital Patient RAG System</h1>
+    
+    <div class="container">
+        <!-- Left Pane: Data Content -->
+        <div class="pane data-pane">
+            <h2>Patient Data</h2>
+            <div class="data-content">{{ data_content }}</div>
+        </div>
+        
+        <!-- Right Pane: Query Interface -->
+        <div class="pane query-pane">
+            <h2>Ask a Question</h2>
+            <input 
+                type="text" 
+                id="questionInput" 
+                class="question-input" 
+                placeholder="Enter your question about the patient data..."
+                onkeypress="handleKeyPress(event)"
+            >
+            <button id="askButton" class="ask-button" onclick="askQuestion()">
+                Ask Question
+            </button>
+            
+            <div id="responseArea" class="response-area" style="display: none;">
+                <div id="responseText" class="response-text"></div>
+                <div id="metadata" class="metadata"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                askQuestion();
+            }
+        }
+
+        async function askQuestion() {
+            const questionInput = document.getElementById('questionInput');
+            const askButton = document.getElementById('askButton');
+            const responseArea = document.getElementById('responseArea');
+            const responseText = document.getElementById('responseText');
+            const metadata = document.getElementById('metadata');
+            
+            const question = questionInput.value.trim();
+            
+            if (!question) {
+                alert('Please enter a question');
+                return;
+            }
+            
+            // Show loading state
+            askButton.disabled = true;
+            askButton.textContent = 'Processing...';
+            responseArea.style.display = 'block';
+            responseArea.className = 'response-area';
+            responseText.textContent = 'Processing your question...';
+            responseText.className = 'response-text loading';
+            metadata.textContent = '';
+            
+            try {
+                const response = await fetch('/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ question: question })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    responseArea.className = 'response-area error';
+                    responseText.textContent = `Error: ${data.error}`;
+                    responseText.className = 'response-text';
+                    metadata.textContent = '';
+                } else {
+                    responseArea.className = 'response-area';
+                    responseText.textContent = data.response;
+                    responseText.className = 'response-text';
+                    metadata.textContent = `Similarity: ${(data.similarity * 100).toFixed(1)}% | Chunk: ${data.chunk_index + 1}`;
+                }
+            } catch (error) {
+                responseArea.className = 'response-area error';
+                responseText.textContent = `Error: Failed to get response - ${error.message}`;
+                responseText.className = 'response-text';
+                metadata.textContent = '';
+            }
+            
+            // Reset button state
+            askButton.disabled = false;
+            askButton.textContent = 'Ask Question';
+        }
+    </script>
+</body>
+</html>
